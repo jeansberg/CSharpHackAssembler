@@ -5,7 +5,7 @@ namespace HackAssembler
     /// <summary>
     /// Translates parsed hack assembly code into machine code
     /// </summary>
-    interface ICodeGenerator
+    public interface ICodeGenerator
     {
         /// <summary>
         /// Transkates a list of hack commands into binary format

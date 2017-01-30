@@ -7,7 +7,7 @@ namespace HackAssembler
     /// <summary>
     /// Basic implementation of IParser
     /// </summary>
-    class BasicParser : IParser
+    public class BasicParser : IParser
     {
         /// <summary>
         /// Implements method from IParser
