@@ -3,7 +3,7 @@
     /// <summary>
     /// Uses an IParser and an ICodeGenerator to convert a hack assembly language text string into machine code and saves it to a file
     /// </summary>
-    class Assembler
+    public class Assembler
     {
         private IParser _parser;
         private ICodeGenerator _generator;

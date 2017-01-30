@@ -7,7 +7,7 @@ namespace HackAssembler
     /// <summary>
     /// Basic implementation of ICodeGenerator
     /// </summary>
-    class BasicCodeGenerator : ICodeGenerator
+    public class BasicCodeGenerator : ICodeGenerator
     {
         /// <summary>
         /// Implements method from ICodeGenerator
