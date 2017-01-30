@@ -49,7 +49,7 @@ namespace HackAssembler.Tests
 
             testAssembler.Assemble(programName, inputFile);
 
-            var outputData = File.ReadAllText(Path.ChangeExtension(programPath, "hack"));
+            var outputData = File.ReadAllText(Path.ChangeExtension(programName, "hack"));
 
             var comparisonData = File.ReadAllText(Path.ChangeExtension(programPath, "cmp"));
 
