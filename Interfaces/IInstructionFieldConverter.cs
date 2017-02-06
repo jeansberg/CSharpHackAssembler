@@ -12,24 +12,11 @@ namespace HackAssembler
     public interface IInstructionFieldConverter
     {
         /// <summary>
-        /// Converts a compute field value from symbolic to binary text
+        /// Converts a field from symbolic to binary text
         /// </summary>
-        /// <param name="cmpText"></param>
+        /// <param name="value"></param>
+        /// <param name="fieldName"></param>
         /// <returns>Binary representation of the compute field</returns>
-        string ConvertCmpField(string cmpText);
-
-        /// <summary>
-        /// Converts a destination field value from symbolic to binary text
-        /// </summary>
-        /// <param name="destText"></param>
-        /// <returns>Binary representation of the destination field</returns>
-        string ConvertDestField(string destText);
-
-        /// <summary>
-        /// Converts a jump field value from symbolic to binary text
-        /// </summary>
-        /// <param name="jmpText"></param>
-        /// <returns>Binary representation of the jump field</returns>
-        string ConvertJmpField(string jmpText);
+        string ConvertField(string value, string fieldName);
     }
 }

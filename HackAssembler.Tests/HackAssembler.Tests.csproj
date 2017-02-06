@@ -80,7 +80,8 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /S "$(SolutionDir)Test files\*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /S "$(SolutionDir)Test files\*" "$(TargetDir)"
+xcopy /Y /S "$(SolutionDir)Specification files\*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

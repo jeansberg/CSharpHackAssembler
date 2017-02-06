@@ -8,11 +8,13 @@ namespace HackAssembler.Tests
     public class IntegrationTests
     {
         Assembler testAssembler;
+        JsonInstructionFieldConverter testConverter;
 
         [TestInitialize]
         public void Initialize()
         {
-            testAssembler = new Assembler(new BasicParser(), new BasicCodeGenerator());
+            testAssembler = new Assembler(new BasicParser(), new BasicCodeGenerator(new JsonInstructionFieldConverter("")));
+            testConverter = new JsonInstructionFieldConverter("");
         }
 
         [TestMethod]
