@@ -24,10 +24,7 @@ namespace HackAssembler
             return lines;
         }
 
-        /// <summary>
-        /// Removes comments, blank lines and spaces
-        /// </summary>
-        /// <param name="lines"></param>
+        // Removes comments, blank lines and spaces
         private void RemoveEmptySpace(ref List<string> lines)
         {
             // Iterates through the list from the end since since the collection is modified inside the loop
@@ -53,10 +50,7 @@ namespace HackAssembler
             }
         }
 
-        /// <summary>
-        /// Processes predefined symbols as well as user-defined label and variable symbols
-        /// </summary>
-        /// <param name="lines"></param>
+        // Processes predefined symbols as well as user-defined label and variable symbols
         private void ProcessSymbols(ref List<string> lines)
         {
             // Creates a symbol table that maps label strings to instruction numbers
@@ -138,22 +132,14 @@ namespace HackAssembler
             }
         }
 
-        /// <summary>
-        /// Returns a boolean value indicating whether a string is a number
-        /// </summary>
-        /// <param name="variable"></param>
-        /// <returns>Boolean value </returns>
+        // Returns a boolean value indicating whether a string is a number
         private bool IsNumber(string variable)
         {
             int res;
             return int.TryParse(variable, out res);
         }
 
-        /// <summary>
-        /// Returns the name of a label if the line contains a label declaration
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns>Label string without brackets</returns>
+        // Returns the name of a label if the line contains a label declaration
         private string GetLabel(string line)
         {
             if(line.Contains("("))
