@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HackAssembler
+﻿namespace HackAssembler
 {
     /// <summary>
     /// Converts instruction fields from symbolic representation to binary
@@ -14,9 +8,9 @@ namespace HackAssembler
         /// <summary>
         /// Converts a field from symbolic to binary text
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="fieldName"></param>
+        /// <param name="fieldValue">The symbolic representation of the field</param>
+        /// <param name="fieldName">The name of the field</param>
         /// <returns>Binary representation of the compute field</returns>
-        string ConvertField(string value, string fieldName);
+        string ConvertField(string fieldValue, string fieldName);
     }
 }
