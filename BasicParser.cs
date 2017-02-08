@@ -10,10 +10,8 @@ namespace HackAssembler
     public class BasicParser : IParser
     {
         /// <summary>
-        /// Implements method from IParser
+        /// Basic implementation of IParser
         /// </summary>
-        /// <param name="assemblyCode"></param>
-        /// <returns>List of commands</returns>
         public List<string> Parse(string assemblyCode)
         {
             // Split contents into a list of lines

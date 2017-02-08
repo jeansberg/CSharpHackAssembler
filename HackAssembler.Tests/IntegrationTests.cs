@@ -41,6 +41,8 @@ namespace HackAssembler.Tests
             CompareOutput("pong/Pong.asm");
         }
 
+        // Assembles a program from a specified .asm file and compares the output in the .hack fileto a pregenerated .cmp file
+        // The files are expected to have the same name
         private void CompareOutput(string programPath)
         {
             var inputFile = File.ReadAllText(programPath);

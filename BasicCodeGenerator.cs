@@ -5,7 +5,7 @@ using System.Text;
 namespace HackAssembler
 {
     /// <summary>
-    /// Basic implementation of ICodeGenerator
+    /// Basic implementation of ICodeGenerator that handles A and C instructions
     /// </summary>
     public class BasicCodeGenerator : ICodeGenerator
     {
@@ -16,13 +16,9 @@ namespace HackAssembler
             m_converter = converter;
         }
 
-        /// <summary>
-        /// ICodeGenerator that handles A and C instructions
-        /// </summary>
-        /// <param name="commands"></param>
-        /// <returns>List of instructions in binary text format</returns>
         public string Generate(List<string> commands)
         {
+            // Creates a string builder for appending generated instructions to a string
             var machineCodeBuilder = new StringBuilder();
 
             // Generates A and C instructions
@@ -41,11 +37,7 @@ namespace HackAssembler
             return machineCodeBuilder.ToString();
         }
 
-        /// <summary>
-        /// Translates A instructions to binary format
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns>Binary string</returns>
+        // Translates A instructions into binary format
         private string GetAInstruction(string command)
         {
             int decimalNumber;
@@ -60,17 +52,13 @@ namespace HackAssembler
             // Converts the number to binary format
             var binaryNumber = Convert.ToString(decimalNumber, 2);
 
-            // Pads with zeros to get 16 digits
+            // Pads the number with zeros to get 16 digits
             binaryNumber = binaryNumber.PadLeft(16, '0');
 
             return binaryNumber;
           }
 
-        /// <summary>
-        /// Translates C instructions to binary format
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns>Binary string</returns>
+        // Translates C instructions into binary format
         private string GetCInstruction(string command)
         {
             var instructionBuilder = new StringBuilder();
@@ -101,6 +89,7 @@ namespace HackAssembler
                 jmpValue = command.Split(';')[1];
             }
 
+            // Uses the instruction converter to get the binary representations of the fields and appends them to the code string
             instructionBuilder.Append(m_converter.ConvertField(cmpValue, "cmp"));
 
             if (!string.IsNullOrEmpty(destValue))
