@@ -30,7 +30,7 @@ namespace HackAssembler
                 var name = Path.GetFileNameWithoutExtension(args[0]);
 
                 // Configures the assembler with a parser and a code generator
-                Assembler assembler = new Assembler(new BasicParser(), new BasicCodeGenerator());
+                Assembler assembler = new Assembler(new BasicParser(), new BasicCodeGenerator(new JsonInstructionFieldConverter()));
 
                 // Calls the Assemble method
                 assembler.Assemble(name, fileContent);

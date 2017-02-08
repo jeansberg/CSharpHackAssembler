@@ -9,8 +9,15 @@ namespace HackAssembler
     /// </summary>
     public class BasicCodeGenerator : ICodeGenerator
     {
+        IInstructionFieldConverter m_converter;
+
+        public BasicCodeGenerator(IInstructionFieldConverter converter)
+        {
+            m_converter = converter;
+        }
+
         /// <summary>
-        /// Implements method from ICodeGenerator
+        /// ICodeGenerator that handles A and C instructions
         /// </summary>
         /// <param name="commands"></param>
         /// <returns>List of instructions in binary text format</returns>
@@ -72,276 +79,40 @@ namespace HackAssembler
             instructionBuilder.Append("111");
 
             // Creates strings to store the destination, computation and jump fields of the instruction
-            var dest = "";
-            var comp = "";
-            var jmp = "";
+            var destValue = "null";
+            var cmpValue = "";
+            var jmpValue = "null";
 
             // Gets the dest field from the left hand side of the equals sign if found
             if (command.Contains("="))
             {
-                dest = command.Split('=')[0];
-                comp = command.Split('=')[1];
+                destValue = command.Split('=')[0];
+                cmpValue = command.Split('=')[1];
             }
             else
             {
-                comp = command;
+                cmpValue = command;
             }
 
-            // Gets the jmp field from the right hand side of the semicolon if found
+            // Splits the jmp field from the comp string if a semicolon is found
             if(command.Contains(";"))
             {
-                comp = command.Split(';')[0];
-                jmp = command.Split(';')[1];
+                cmpValue = command.Split(';')[0];
+                jmpValue = command.Split(';')[1];
+            }
+
+            instructionBuilder.Append(m_converter.ConvertField(cmpValue, "cmp"));
+
+            if (!string.IsNullOrEmpty(destValue))
+            {
+                instructionBuilder.Append(m_converter.ConvertField(destValue, "dest"));
+            }
+
+            if (!string.IsNullOrEmpty(jmpValue))
+            {
+                instructionBuilder.Append(m_converter.ConvertField(jmpValue, "jmp"));
             }
             
-            // Builds the binary string according to the hack specification
-            if (!comp.Contains("M"))
-            {
-                instructionBuilder.Append("0");
-
-                switch (comp)
-                {
-                    case "0":
-                        {
-                            instructionBuilder.Append("101010");
-                            break;
-                        }
-                    case "1":
-                        {
-                            instructionBuilder.Append("111111");
-                            break;
-                        }
-                    case "-1":
-                        {
-                            instructionBuilder.Append("111010");
-                            break;
-                        }
-                    case "D":
-                        {
-                            instructionBuilder.Append("001100");
-                            break;
-                        }
-                    case "A":
-                        {
-                            instructionBuilder.Append("110000");
-                            break;
-                        }
-                    case "!D":
-                        {
-                            instructionBuilder.Append("001101");
-                            break;
-                        }
-                    case "!A":
-                        {
-                            instructionBuilder.Append("110001");
-                            break;
-                        }
-                    case "-D":
-                        {
-                            instructionBuilder.Append("001111");
-                            break;
-                        }
-                    case "-A":
-                        {
-                            instructionBuilder.Append("110011");
-                            break;
-                        }
-                    case "D+1":
-                        {
-                            instructionBuilder.Append("011111");
-                            break;
-                        }
-                    case "A+1":
-                        {
-                            instructionBuilder.Append("110111");
-                            break;
-                        }
-                    case "D-1":
-                        {
-                            instructionBuilder.Append("001110");
-                            break;
-                        }
-                    case "A-1":
-                        {
-                            instructionBuilder.Append("110010");
-                            break;
-                        }
-                    case "D+A":
-                        {
-                            instructionBuilder.Append("000010");
-                            break;
-                        }
-                    case "D-A":
-                        {
-                            instructionBuilder.Append("010011");
-                            break;
-                        }
-                    case "A-D":
-                        {
-                            instructionBuilder.Append("000111");
-                            break;
-                        }
-                    case "D&A":
-                        {
-                            instructionBuilder.Append("000000");
-                            break;
-                        }
-                    case "D|A":
-                        {
-                            instructionBuilder.Append("010101");
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                instructionBuilder.Append("1");
-
-                switch (comp)
-                {
-                    case "M":
-                        {
-                            instructionBuilder.Append("110000");
-                            break;
-                        }
-                    case "!M":
-                        {
-                            instructionBuilder.Append("110001");
-                            break;
-                        }
-                    case "-M":
-                        {
-                            instructionBuilder.Append("110011");
-                            break;
-                        }
-                    case "M+1":
-                        {
-                            instructionBuilder.Append("110111");
-                            break;
-                        }
-                    case "M-1":
-                        {
-                            instructionBuilder.Append("110010");
-                            break;
-                        }
-                    case "D+M":
-                        {
-                            instructionBuilder.Append("000010");
-                            break;
-                        }
-                    case "D-M":
-                        {
-                            instructionBuilder.Append("010011");
-                            break;
-                        }
-                    case "M-D":
-                        {
-                            instructionBuilder.Append("000111");
-                            break;
-                        }
-                    case "D&M":
-                        {
-                            instructionBuilder.Append("000000");
-                            break;
-                        }
-                    case "D|M":
-                        {
-                            instructionBuilder.Append("010101");
-                            break;
-                        }
-                }
-            }
-
-            switch (dest)
-            {
-                case "M":
-                    {
-                        instructionBuilder.Append("001");
-                        break;
-                    }
-                case "D":
-                    {
-                        instructionBuilder.Append("010");
-                        break;
-                    }
-                case "MD":
-                    {
-                        instructionBuilder.Append("011");
-                        break;
-                    }
-                case "A":
-                    {
-                        instructionBuilder.Append("100");
-                        break;
-                    }
-                case "AM":
-                    {
-                        instructionBuilder.Append("101");
-                        break;
-                    }
-                case "AD":
-                    {
-                        instructionBuilder.Append("110");
-                        break;
-                    }
-                case "AMD":
-                    {
-                        instructionBuilder.Append("111");
-                        break;
-                    }
-                default:
-                    {
-                        // The dest field can also be empty
-                        instructionBuilder.Append("000");
-                        break;
-                    }
-            }
-
-            switch (jmp)
-            {
-                case "JGT":
-                    {
-                        instructionBuilder.Append("001");
-                        break;
-                    }
-                case "JEQ":
-                    {
-                        instructionBuilder.Append("010");
-                        break;
-                    }
-                case "JGE":
-                    {
-                        instructionBuilder.Append("011");
-                        break;
-                    }
-                case "JLT":
-                    {
-                        instructionBuilder.Append("100");
-                        break;
-                    }
-                case "JNE":
-                    {
-                        instructionBuilder.Append("101");
-                        break;
-                    }
-                case "JLE":
-                    {
-                        instructionBuilder.Append("110");
-                        break;
-                    }
-                case "JMP":
-                    {
-                        instructionBuilder.Append("111");
-                        break;
-                    }
-                default:
-                    {
-                        // The jmp field can also be empty
-                        instructionBuilder.Append("000");
-                        break;
-                    }
-            }
-
             return instructionBuilder.ToString();
         }
     }
