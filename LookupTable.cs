@@ -2,6 +2,9 @@
 
 namespace HackAssembler
 {
+    /// <summary>
+    /// Wraps a dictionary object containing symbolic field values and their binary form for a specific field
+    /// </summary>
     public class LookupTable
     {
         private string m_name;
