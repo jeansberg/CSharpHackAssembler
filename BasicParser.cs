@@ -9,9 +9,6 @@ namespace HackAssembler
     /// </summary>
     public class BasicParser : IParser
     {
-        /// <summary>
-        /// Basic implementation of IParser
-        /// </summary>
         public List<string> Parse(string assemblyCode)
         {
             // Split contents into a list of lines
