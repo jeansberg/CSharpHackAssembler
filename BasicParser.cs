@@ -9,9 +9,13 @@ namespace HackAssembler
     /// </summary>
     public class BasicParser : IParser
     {
-        /// <summary>
-        /// Basic implementation of IParser
-        /// </summary>
+        ISymbolConverter m_replacer;
+
+        public BasicParser(ISymbolConverter converter)
+        {
+            m_replacer = converter;
+        }
+
         public List<string> Parse(string assemblyCode)
         {
             // Split contents into a list of lines
@@ -53,18 +57,6 @@ namespace HackAssembler
         // Processes predefined symbols as well as user-defined label and variable symbols
         private void ProcessSymbols(ref List<string> lines)
         {
-            // Creates a symbol table that maps label strings to instruction numbers
-            var symbolTable = new Dictionary<string, int>();
-
-            // Gets predefined symbols for the hack language
-            var predefinedSymbols = System.IO.File.ReadAllLines("predefined.txt");
-
-            foreach (var symbol in predefinedSymbols)
-            {
-                // Expects a file with symbol names and instruction numbers separated by spaces
-                symbolTable.Add(symbol.Split(' ')[0], Convert.ToInt32(symbol.Split(' ')[1]));
-            }
-
             // Creates a list of label line numbers so label lines can be removed after building the symbol table
             var labelLineNumbers = new List<int>();
 
@@ -81,7 +73,7 @@ namespace HackAssembler
 
                 // Adds the label to the symbol table with the corresponding instruction number 
                 // The number of lines removed needs to be subtracted from the instruction number in order to be correct
-                symbolTable.Add(label, i - labelLineNumbers.Count);
+                m_replacer.AddSymbol(label, "labels", (i - labelLineNumbers.Count).ToString());
                 labelLineNumbers.Add(i);
             }
 
@@ -92,21 +84,18 @@ namespace HackAssembler
             }
 
             // Replaces references to labels with the corresponding instruction number from the symbol table
-            foreach(var pair in symbolTable)
+
+            for(int i = 0; i < lines.Count; i++)
             {
-                for(int i = 0; i < lines.Count; i++)
+                string instructionNumber;
+                if((instructionNumber = m_replacer.ConvertSymbol(lines[i].TrimStart('@'), "labels")) != "")
                 {
-                    if(lines[i].TrimStart('@') == pair.Key)
-                    {
-                        lines[i] = "@" + pair.Value.ToString();
-                    }
+                    lines[i] = "@" + instructionNumber;
                 }
             }
 
-            // Creates a variable table that maps variable names to memory locations starting at 16
-            var variableTable = new Dictionary<string, int>();
-
             // Finds all variable references
+            var variableCounter = 0;
             for (var i = 0; i <lines.Count; i++)
             {
                 if (lines[i].Contains("@"))
@@ -120,14 +109,14 @@ namespace HackAssembler
                     }
 
                     // Adds the variable to the table and assigns it a memory location when it is referenced for the first time
-                    if (!variableTable.ContainsKey(variable))
+                    if (m_replacer.ConvertSymbol(variable, "variables") == "")
                     {
-                        var memoryAddress = variableTable.Keys.Count + 16;
-                        variableTable.Add(variable, memoryAddress);
+                        m_replacer.AddSymbol(variable, "variables", (variableCounter + 16).ToString());
+                        variableCounter++;
                     }
 
                     // Replaces the variable text with the corresponding memory location
-                    lines[i] = lines[i].Replace(variable, variableTable[variable].ToString());
+                    lines[i] = lines[i].Replace(variable, m_replacer.ConvertSymbol(variable, "variables"));
                 }
             }
         }

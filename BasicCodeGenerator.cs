@@ -9,9 +9,9 @@ namespace HackAssembler
     /// </summary>
     public class BasicCodeGenerator : ICodeGenerator
     {
-        IInstructionFieldConverter m_converter;
+        ISymbolConverter m_converter;
 
-        public BasicCodeGenerator(IInstructionFieldConverter converter)
+        public BasicCodeGenerator(ISymbolConverter converter)
         {
             m_converter = converter;
         }
@@ -90,16 +90,16 @@ namespace HackAssembler
             }
 
             // Uses the instruction converter to get the binary representations of the fields and appends them to the code string
-            instructionBuilder.Append(m_converter.ConvertField(cmpValue, "cmp"));
+            instructionBuilder.Append(m_converter.ConvertSymbol(cmpValue, "cmp"));
 
             if (!string.IsNullOrEmpty(destValue))
             {
-                instructionBuilder.Append(m_converter.ConvertField(destValue, "dest"));
+                instructionBuilder.Append(m_converter.ConvertSymbol(destValue, "dest"));
             }
 
             if (!string.IsNullOrEmpty(jmpValue))
             {
-                instructionBuilder.Append(m_converter.ConvertField(jmpValue, "jmp"));
+                instructionBuilder.Append(m_converter.ConvertSymbol(jmpValue, "jmp"));
             }
             
             return instructionBuilder.ToString();
